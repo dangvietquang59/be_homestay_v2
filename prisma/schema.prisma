@@ -1,0 +1,269 @@
+// schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Chain {
+  id          String    @id @default(uuid())
+  name        String
+  description String?
+  branches    Branch[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Branch {
+  id         String   @id @default(uuid())
+  chain      Chain    @relation(fields: [chainId], references: [id])
+  chainId    String
+  name       String
+  address    String
+  phone      String?
+  manager    Staff?   @relation("BranchManager", fields: [managerId], references: [id])
+  managerId  String?  @unique
+
+  rooms      Room[]
+  staff      Staff[]
+  inventory  Inventory[]
+  reviews    Review[]
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Room {
+  id          String       @id @default(uuid())
+  branch      Branch       @relation(fields: [branchId], references: [id])
+  branchId    String
+  roomNumber  String
+  type        String
+  status      RoomStatus   @default(AVAILABLE)
+  price       Float
+  description String?
+
+  bookings    Booking[]
+  facilities  RoomFacility[]
+  reviews     Review[]
+  maintenanceRequests MaintenanceRequest[]
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+enum RoomStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+}
+
+model User {
+  id              String    @id @default(uuid())
+  name            String
+  email           String    @unique
+  password        String
+  phoneNumber     String?
+  role            UserRole  @default(CUSTOMER)
+  provider        String?
+  providerId      String?
+  emailVerified   Boolean   @default(false)
+  resetToken      String?
+  resetTokenExpiry DateTime?
+  active          Boolean   @default(true)
+
+  bookings     Booking[]
+  reviews      Review[]
+  notifications Notification[]
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+enum UserRole {
+  ADMIN
+  CUSTOMER
+}
+
+model Staff {
+  id              String    @id @default(uuid())
+  branch          Branch    @relation(fields: [branchId], references: [id])
+  branchId        String
+  name            String
+  email           String    @unique
+  phone           String?
+  role            StaffRole
+
+  managingBranch  Branch?   @relation("BranchManager")
+  maintenanceRequests MaintenanceRequest[]
+  notifications   Notification[]
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+enum StaffRole {
+  MANAGER
+  RECEPTIONIST
+  CLEANER
+  MAINTENANCE
+}
+
+model Booking {
+  id          String    @id @default(uuid())
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
+  room        Room      @relation(fields: [roomId], references: [id])
+  roomId      String
+  checkIn     DateTime
+  checkOut    DateTime
+  status      BookingStatus @default(BOOKED)
+  totalPrice  Float
+
+  payments    Payment[]
+  serviceOrders ServiceOrder[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum BookingStatus {
+  BOOKED
+  CHECKED_IN
+  CHECKED_OUT
+  CANCELLED
+}
+
+model Payment {
+  id          String    @id @default(uuid())
+  booking     Booking   @relation(fields: [bookingId], references: [id])
+  bookingId   String
+  amount      Float
+  paymentDate DateTime  @default(now())
+  method      PaymentMethod
+  status      PaymentStatus @default(PENDING)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum PaymentMethod {
+  CASH
+  CREDIT_CARD
+  ONLINE
+  BANK_TRANSFER
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+model Facility {
+  id          String        @id @default(uuid())
+  name        String
+  description String?
+
+  rooms       RoomFacility[]
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model RoomFacility {
+  id          String   @id @default(uuid())
+  room        Room     @relation(fields: [roomId], references: [id])
+  roomId      String
+  facility    Facility @relation(fields: [facilityId], references: [id])
+  facilityId  String
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([roomId, facilityId])
+}
+
+model ServiceOrder {
+  id          String    @id @default(uuid())
+  booking     Booking   @relation(fields: [bookingId], references: [id])
+  bookingId   String
+  serviceName String
+  price       Float
+  quantity    Int
+  status      ServiceOrderStatus @default(PENDING)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum ServiceOrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+model Inventory {
+  id          String    @id @default(uuid())
+  branch      Branch    @relation(fields: [branchId], references: [id])
+  branchId    String
+  itemName    String
+  quantity    Int
+  description String?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model MaintenanceRequest {
+  id          String    @id @default(uuid())
+  room        Room      @relation(fields: [roomId], references: [id])
+  roomId      String
+  staff       Staff?    @relation(fields: [staffId], references: [id])
+  staffId     String?
+  description String
+  status      MaintenanceStatus @default(PENDING)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum MaintenanceStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model Review {
+  id         String    @id @default(uuid())
+  user       User      @relation(fields: [userId], references: [id])
+  userId     String
+  branch     Branch?   @relation(fields: [branchId], references: [id])
+  branchId   String?
+  room       Room?     @relation(fields: [roomId], references: [id])
+  roomId     String?
+  rating     Int
+  comment    String?
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model Notification {
+  id         String    @id @default(uuid())
+  user       User?     @relation(fields: [userId], references: [id])
+  userId     String?
+  staff      Staff?    @relation(fields: [staffId], references: [id])
+  staffId    String?
+  title      String
+  message    String
+  isRead     Boolean   @default(false)
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
