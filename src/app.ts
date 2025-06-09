@@ -3,7 +3,9 @@ import cors from "cors";
 import morgan from "morgan";
 import { errorHandler } from "@/middlewares/error.middleware";
 import userRouter from "./routes/user.route";
-import testRoutes from "./routes/test.route";
+import chainRouter from "./routes/chain.route";
+import branchesRouter from "./routes/branches.route";
+import roomRouter from "./routes/room.route";
 
 const app: Application = express();
 
@@ -19,8 +21,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/users", userRouter);
-app.use("/api/test", testRoutes);
-
+app.use("/api/chains", chainRouter);
+app.use("/api/branches", branchesRouter);
+app.use("/api/rooms", roomRouter);
 // Global error handler
 app.use(errorHandler as ErrorRequestHandler);
 
