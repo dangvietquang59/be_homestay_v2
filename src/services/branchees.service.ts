@@ -45,4 +45,32 @@ const getBranches = async (
   });
   return branches;
 };
-export { createBranch, getBranchesById, getBranches };
+
+const updateBranch = async (id: string, branch: Partial<BranchType>) => {
+  const updatedBranch = await prisma.branch.update({
+    where: { id },
+    data: {
+      name: branch.name || undefined,
+      address: branch.address || undefined,
+      phone: branch.phone || undefined,
+      chainId: branch.chainId || undefined,
+      isDeleted: branch.isDeleted !== undefined ? branch.isDeleted : undefined,
+    },
+  });
+  return updatedBranch;
+};
+
+const deleteBranch = async (id: string) => {
+  const deletedBranch = await prisma.branch.update({
+    where: { id },
+    data: { isDeleted: true },
+  });
+  return deletedBranch;
+};
+export {
+  createBranch,
+  getBranchesById,
+  getBranches,
+  updateBranch,
+  deleteBranch,
+};

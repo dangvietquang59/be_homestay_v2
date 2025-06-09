@@ -4,6 +4,7 @@ export type BranchType = {
   name: string;
   address: string;
   phone: string;
+  isDeleted?: boolean;
   managerId?: string;
   createdAt?: Date | null;
   updatedAt?: Date | null;

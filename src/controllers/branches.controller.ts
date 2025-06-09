@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import {
   createBranch,
+  deleteBranch,
   getBranches,
-  getBranchesById,
+  updateBranch,
 } from "@/services/branchees.service";
 import { errorResponse, successResponse } from "@/utils/response";
 import { AppError } from "@/utils/error";
@@ -57,4 +58,42 @@ const getBranchesController = async (req: Request, res: Response) => {
     res.status(500).send(errorResponse("Internal server error" + error, 500));
   }
 };
-export { createBranchController, getBranchesController };
+const updateBranchController = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const branch = req.body;
+    const updatedBranch = await updateBranch(id, branch);
+    res
+      .status(200)
+      .send(successResponse(updatedBranch, "Branch updated successfully"));
+  } catch (error) {
+    if (error instanceof AppError) {
+      return res
+        .status(error.status)
+        .send(errorResponse(error.message, error.status, error.data));
+    }
+    res.status(500).send(errorResponse("Internal server error" + error, 500));
+  }
+};
+const deleteBranchController = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const deletedBranch = await deleteBranch(id);
+    res
+      .status(200)
+      .send(successResponse(deletedBranch, "Branch deleted successfully"));
+  } catch (error) {
+    if (error instanceof AppError) {
+      return res
+        .status(error.status)
+        .send(errorResponse(error.message, error.status, error.data));
+    }
+    res.status(500).send(errorResponse("Internal server error" + error, 500));
+  }
+};
+export {
+  createBranchController,
+  getBranchesController,
+  updateBranchController,
+  deleteBranchController,
+};

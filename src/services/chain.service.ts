@@ -29,7 +29,7 @@ const updateChain = async (id: string, chain: ChainType) => {
     data: {
       name: chain.name || undefined,
       description: chain.description || undefined,
-      isDeleted: chain.isDeleted || undefined,
+      isDeleted: false,
     },
   });
   return updatedChain;
