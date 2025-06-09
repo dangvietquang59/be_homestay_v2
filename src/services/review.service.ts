@@ -30,7 +30,6 @@ const getReviews = async (
     roomId: roomId || undefined,
   };
 
-  // Lấy danh sách review
   const reviews = await prisma.review.findMany({
     skip: (page - 1) * limit,
     take: limit,
@@ -52,7 +51,6 @@ const getReviews = async (
     },
   });
 
-  // Tính trung bình rating
   let averageRating = 0;
 
   if (roomId) {
@@ -65,7 +63,6 @@ const getReviews = async (
         rating: true,
       },
     });
-    console.log("Room rating AVG:", roomRating._avg.rating);
     averageRating = roomRating._avg.rating || 0;
   } else if (branchId) {
     // Lấy rating trực tiếp của branch
@@ -79,7 +76,6 @@ const getReviews = async (
       },
     });
 
-    // Lấy rating của các phòng trong branch
     const rooms = await prisma.room.findMany({
       where: {
         branchId,
@@ -108,14 +104,11 @@ const getReviews = async (
       roomsRating = branchRoomRating._avg.rating || 0;
     }
 
-    // Tính trung bình tổng hợp
     const directRating = branchDirectRating._avg.rating || 0;
 
     if (directRating > 0 && roomsRating > 0) {
-      // Nếu có cả 2 loại rating, lấy trung bình
       averageRating = (directRating + roomsRating) / 2;
     } else {
-      // Nếu chỉ có 1 loại rating, lấy giá trị đó
       averageRating = directRating || roomsRating;
     }
   }
@@ -126,4 +119,24 @@ const getReviews = async (
   };
 };
 
-export { createReview, getReviews };
+const deleteReview = async (reviewId: string) => {
+  const review = await prisma.review.update({
+    where: { id: reviewId },
+    data: { isDeleted: true },
+  });
+  return review;
+};
+
+const updateReview = async (reviewId: string, review: ReviewType) => {
+  const updatedReview = await prisma.review.update({
+    where: { id: reviewId },
+    data: {
+      rating: review.rating || undefined,
+      comment: review.comment || undefined,
+      isDeleted: review.isDeleted || undefined,
+    },
+  });
+  return updatedReview;
+};
+
+export { createReview, getReviews, deleteReview, updateReview };

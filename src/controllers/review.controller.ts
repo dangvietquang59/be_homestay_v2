@@ -1,5 +1,10 @@
 import { Request, Response } from "express";
-import { createReview, getReviews } from "@/services/review.service";
+import {
+  createReview,
+  deleteReview,
+  getReviews,
+  updateReview,
+} from "@/services/review.service";
 import { AppError } from "@/utils/error";
 import { errorResponse, successResponse } from "@/utils/response";
 
@@ -55,4 +60,43 @@ const getReviewsController = async (req: Request, res: Response) => {
   }
 };
 
-export { createReviewController, getReviewsController };
+const deleteReviewController = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const deletedReview = await deleteReview(id);
+    res
+      .status(200)
+      .send(successResponse(deletedReview, "Review deleted successfully", 200));
+  } catch (error) {
+    if (error instanceof AppError) {
+      return res
+        .status(error.status)
+        .send(errorResponse(error.message, error.status, error.data));
+    }
+    res.status(500).send(errorResponse("Internal server error", 500));
+  }
+};
+
+const updateReviewController = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const review = req.body;
+    const updatedReview = await updateReview(id, review);
+    res
+      .status(200)
+      .send(successResponse(updatedReview, "Review updated successfully", 200));
+  } catch (error) {
+    if (error instanceof AppError) {
+      return res
+        .status(error.status)
+        .send(errorResponse(error.message, error.status, error.data));
+    }
+    res.status(500).send(errorResponse("Internal server error", 500));
+  }
+};
+export {
+  createReviewController,
+  getReviewsController,
+  deleteReviewController,
+  updateReviewController,
+};
