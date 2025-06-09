@@ -21,7 +21,7 @@ const createChainController = async (req: Request, res: Response) => {
         .status(error.status)
         .send(errorResponse(error.message, error.status, error.data));
     }
-    res.status(500).send(errorResponse("Internal server error", 500));
+    res.status(500).send(errorResponse("Internal server error" + error, 500));
   }
 };
 const getChainsController = async (req: Request, res: Response) => {
@@ -44,7 +44,9 @@ const getChainsController = async (req: Request, res: Response) => {
         .status(error.status)
         .send(errorResponse(error.message, error.status, error.data));
     }
-    res.status(500).send(errorResponse("Internal server error" + error, 500));
+    res
+      .status(500)
+      .send(errorResponse("Internal server error" +    error, 500));
   }
 };
 
@@ -62,7 +64,7 @@ const updateChainController = async (req: Request, res: Response) => {
         .status(error.status)
         .send(errorResponse(error.message, error.status, error.data));
     }
-    res.status(500).send(errorResponse("Internal server error", 500));
+    res.status(500).send(errorResponse("Internal server error" + error, 500));
   }
 };
 const deleteChainController = async (req: Request, res: Response) => {
@@ -76,7 +78,7 @@ const deleteChainController = async (req: Request, res: Response) => {
         .status(error.status)
         .send(errorResponse(error.message, error.status, error.data));
     }
-    res.status(500).send(errorResponse("Internal server error", 500));
+    res.status(500).send(errorResponse("Internal server error" + error, 500));
   }
 };
 export {

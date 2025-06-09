@@ -32,7 +32,7 @@ const getUsers = async (req: Request, res: Response) => {
         .status(error.status)
         .send(errorResponse(error.message, error.status, error.data));
     }
-    res.status(500).send(errorResponse("Internal server error", 500));
+    res.status(500).send(errorResponse("Internal server error" + error, 500));
   }
 };
 
@@ -50,7 +50,7 @@ const login = async (req: Request, res: Response) => {
         .status(error.status)
         .send(errorResponse(error.message, error.status, error.data));
     }
-    res.status(500).send(errorResponse("Internal server error", 500));
+    res.status(500).send(errorResponse("Internal server error" + error, 500));
   }
 };
 
@@ -75,7 +75,7 @@ const register = async (req: Request, res: Response) => {
         .status(error.status)
         .send(errorResponse(error.message, error.status, error.data));
     }
-    res.status(500).send(errorResponse("Internal server error", 500));
+    res.status(500).send(errorResponse("Internal server error" + error, 500));
   }
 };
 
@@ -93,7 +93,7 @@ const verifyEmail = async (req: Request, res: Response) => {
         .status(error.status)
         .send(errorResponse(error.message, error.status, error.data));
     }
-    res.status(500).send(errorResponse("Internal server error", 500));
+    res.status(500).send(errorResponse("Internal server error" + error, 500));
   }
 };
 
@@ -111,7 +111,7 @@ const resendVerification = async (req: Request, res: Response) => {
         .status(error.status)
         .send(errorResponse(error.message, error.status, error.data));
     }
-    res.status(500).send(errorResponse("Internal server error", 500));
+    res.status(500).send(errorResponse("Internal server error" + error, 500));
   }
 };
 
@@ -126,7 +126,7 @@ const refreshToken = async (req: Request, res: Response) => {
         .status(error.status)
         .send(errorResponse(error.message, error.status, error.data));
     }
-    res.status(500).send(errorResponse("Internal server error", 500));
+    res.status(500).send(errorResponse("Internal server error" + error, 500));
   }
 };
 
@@ -144,7 +144,7 @@ const forgotPassword = async (req: Request, res: Response) => {
         .status(error.status)
         .send(errorResponse(error.message, error.status, error.data));
     }
-    res.status(500).send(errorResponse("Internal server error", 500));
+    res.status(500).send(errorResponse("Internal server error" + error, 500));
   }
 };
 
@@ -162,7 +162,7 @@ const resetPassword = async (req: Request, res: Response) => {
         .status(error.status)
         .send(errorResponse(error.message, error.status, error.data));
     }
-    res.status(500).send(errorResponse("Internal server error", 500));
+    res.status(500).send(errorResponse("Internal server error" + error, 500));
   }
 };
 
@@ -194,7 +194,7 @@ const changePassword = async (
         .status(error.status)
         .send(errorResponse(error.message, error.status, error.data));
     }
-    res.status(500).send(errorResponse("Internal server error", 500));
+    res.status(500).send(errorResponse("Internal server error" + error, 500));
   }
 };
 
@@ -221,7 +221,7 @@ const updateUser = async (req: AuthenticatedRequest, res: Response) => {
         .status(error.status)
         .send(errorResponse(error.message, error.status, error.data));
     }
-    res.status(500).send(errorResponse("Internal server error", 500));
+    res.status(500).send(errorResponse("Internal server error" + error, 500));
   }
 };
 
@@ -247,7 +247,7 @@ const softDeleteUser = async (req: AuthenticatedRequest, res: Response) => {
         .status(error.status)
         .send(errorResponse(error.message, error.status, error.data));
     }
-    res.status(500).send(errorResponse("Internal server error", 500));
+    res.status(500).send(errorResponse("Internal server error" + error, 500));
   }
 };
 

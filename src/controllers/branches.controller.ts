@@ -20,7 +20,7 @@ const createBranchController = async (req: Request, res: Response) => {
         .status(error.status)
         .send(errorResponse(error.message, error.status, error.data));
     }
-    res.status(500).send(errorResponse("Internal server error", 500));
+    res.status(500).send(errorResponse("Internal server error" + error, 500));
   }
 };
 
@@ -54,7 +54,7 @@ const getBranchesController = async (req: Request, res: Response) => {
         .status(error.status)
         .send(errorResponse(error.message, error.status, error.data));
     }
-    res.status(500).send(errorResponse("Internal server error", 500));
+    res.status(500).send(errorResponse("Internal server error" + error, 500));
   }
 };
 export { createBranchController, getBranchesController };
