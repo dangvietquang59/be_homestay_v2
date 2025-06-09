@@ -13,6 +13,7 @@ model Chain {
   name        String
   description String?
   branches    Branch[]
+  isDeleted   Boolean   @default(false)
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -27,6 +28,7 @@ model Branch {
   phone      String?
   manager    Staff?   @relation("BranchManager", fields: [managerId], references: [id])
   managerId  String?  @unique
+  isDeleted  Boolean  @default(false)
 
   rooms      Room[]
   staff      Staff[]
@@ -46,6 +48,7 @@ model Room {
   status      RoomStatus   @default(AVAILABLE)
   price       Float
   description String?
+  isDeleted   Boolean      @default(false)
 
   bookings    Booking[]
   facilities  RoomFacility[]
@@ -75,6 +78,7 @@ model User {
   resetToken      String?
   resetTokenExpiry DateTime?
   active          Boolean   @default(true)
+  isDeleted       Boolean   @default(false)
 
   bookings     Booking[]
   reviews      Review[]
@@ -97,6 +101,7 @@ model Staff {
   email           String    @unique
   phone           String?
   role            StaffRole
+  isDeleted       Boolean   @default(false)
 
   managingBranch  Branch?   @relation("BranchManager")
   maintenanceRequests MaintenanceRequest[]
@@ -123,6 +128,7 @@ model Booking {
   checkOut    DateTime
   status      BookingStatus @default(BOOKED)
   totalPrice  Float
+  isDeleted   Boolean   @default(false)
 
   payments    Payment[]
   serviceOrders ServiceOrder[]
@@ -146,6 +152,7 @@ model Payment {
   paymentDate DateTime  @default(now())
   method      PaymentMethod
   status      PaymentStatus @default(PENDING)
+  isDeleted   Boolean   @default(false)
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -168,6 +175,7 @@ model Facility {
   id          String        @id @default(uuid())
   name        String
   description String?
+  isDeleted   Boolean       @default(false)
 
   rooms       RoomFacility[]
 
@@ -181,6 +189,7 @@ model RoomFacility {
   roomId      String
   facility    Facility @relation(fields: [facilityId], references: [id])
   facilityId  String
+  isDeleted   Boolean  @default(false)
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -196,6 +205,7 @@ model ServiceOrder {
   price       Float
   quantity    Int
   status      ServiceOrderStatus @default(PENDING)
+  isDeleted   Boolean   @default(false)
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -214,6 +224,7 @@ model Inventory {
   itemName    String
   quantity    Int
   description String?
+  isDeleted   Boolean   @default(false)
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -227,6 +238,7 @@ model MaintenanceRequest {
   staffId     String?
   description String
   status      MaintenanceStatus @default(PENDING)
+  isDeleted   Boolean   @default(false)
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -249,6 +261,7 @@ model Review {
   roomId     String?
   rating     Int
   comment    String?
+  isDeleted  Boolean   @default(false)
 
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
@@ -263,6 +276,7 @@ model Notification {
   title      String
   message    String
   isRead     Boolean   @default(false)
+  isDeleted  Boolean   @default(false)
 
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt

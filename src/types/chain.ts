@@ -3,6 +3,7 @@ export type ChainType = {
   name: string;
   description?: string;
   branches?: string[] | null;
+  isDeleted?: boolean;
   createdAt?: Date | null;
   updatedAt?: Date | null;
 };
