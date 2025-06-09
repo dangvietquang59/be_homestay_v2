@@ -6,6 +6,7 @@ import userRouter from "./routes/user.route";
 import chainRouter from "./routes/chain.route";
 import branchesRouter from "./routes/branches.route";
 import roomRouter from "./routes/room.route";
+import reviewRouter from "./routes/review.route";
 
 const app: Application = express();
 
@@ -24,6 +25,7 @@ app.use("/api/users", userRouter);
 app.use("/api/chains", chainRouter);
 app.use("/api/branches", branchesRouter);
 app.use("/api/rooms", roomRouter);
+app.use("/api/reviews", reviewRouter);
 // Global error handler
 app.use(errorHandler as ErrorRequestHandler);
 
