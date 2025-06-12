@@ -119,22 +119,24 @@ enum StaffRole {
 }
 
 model Booking {
-  id          String    @id @default(uuid())
-  user        User      @relation(fields: [userId], references: [id])
-  userId      String
-  room        Room      @relation(fields: [roomId], references: [id])
-  roomId      String
-  checkIn     DateTime
-  checkOut    DateTime
-  status      BookingStatus @default(BOOKED)
-  totalPrice  Float
-  isDeleted   Boolean   @default(false)
+  id             String        @id @default(uuid())
+  user           User          @relation(fields: [userId], references: [id])
+  userId         String
+  room           Room          @relation(fields: [roomId], references: [id])
+  roomId         String
+  checkIn        DateTime
+  checkOut       DateTime
+  actualCheckIn  DateTime?
+  actualCheckOut DateTime?
+  status         BookingStatus @default(BOOKED)
+  totalPrice     Float
+  isDeleted      Boolean       @default(false)
 
-  payments    Payment[]
-  serviceOrders ServiceOrder[]
+  payments       Payment[]
+  serviceOrders  ServiceOrder[]
 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
 
 enum BookingStatus {
