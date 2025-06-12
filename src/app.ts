@@ -8,6 +8,7 @@ import branchesRouter from "./routes/branches.route";
 import roomRouter from "./routes/room.route";
 import reviewRouter from "./routes/review.route";
 import bookingRouter from "./routes/booking.routes";
+import uploadRouter from "./routes/upload.routes";
 
 const app: Application = express();
 
@@ -28,6 +29,8 @@ app.use("/api/branches", branchesRouter);
 app.use("/api/rooms", roomRouter);
 app.use("/api/reviews", reviewRouter);
 app.use("/api/bookings", bookingRouter);
+app.use("/api/upload", uploadRouter);
+
 // Global error handler
 app.use(errorHandler as ErrorRequestHandler);
 
